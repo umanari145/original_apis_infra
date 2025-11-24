@@ -1,16 +1,31 @@
 # original_apis_infra
 
 
-# sourceレベルの登録
+# オンプレミスデプロイグループの登録
+オンプレとしての登録(タグも登録)
+![オンプレ確認](images/dg/タグ登録.png)
+確認
+![確認](images/dg/確認.png)
 
+
+# sourceの登録
+保留中になっている
+![step1](images/connections/step1.png)
+リポジトリを選択
+![step2](images/connections/step2.png)
+成功していることを確認
+![step3](images/connections/step3.png)
 
 ## デプロイエージェントの登録
 オンプレミスの登録<br>
 regionはlightsailのregion
 ```
-aws deploy register-on-premises-instance --instance-name LAMP_PHP_8-1  --iam-user-arn arn:aws:iam::697698772502:user/norio_202407 --region ap-northeast-1  --profile norio
-aws deploy add-tags-to-on-premises-instances --instance-names LAMP_PHP_8-1  --tags Key=Name,Value=CodeDeployMyLightsail --region ap-northeast-1 --profile norio
-aws deploy list-on-premises-instances --region ap-northeast-1 --profile norio
+aws deploy register-on-premises-instance --instance-name LAMP_PHP_8-1  --iam-user-arn arn:aws:iam::697698772502:user/for_awslightsail --region ap-northeast-1  --profile for_awslightsail
+
+aws deploy add-tags-to-on-premises-instances --instance-names LAMP_PHP_8-1  --tags Key=Name,Value=CodeDeployMyLightsail --region ap-northeast-1 --profile for_awslightsail
+
+aws deploy list-on-premises-instances --region ap-northeast-1 --profile for_awslightsail
+
 ```
 
 登録解除
@@ -19,7 +34,7 @@ aws deploy deregister-on-premises-instance --instance-name LAMP_PHP_8-1 --profil
 ログ
 tail -1000 /var/log/aws/codedeploy-agent/codedeploy-agent.log
 
-以下の状態になっていればOK
+以下の状態になっていればagent側が受付OKにはなっている
 ```
 2025-11-23T13:57:38 INFO  [codedeploy-agent(626040)]: Version file found in /opt/codedeploy-agent/.version with agent version OFFICIAL_1.8.0-17_deb.
 2025-11-23T13:58:23 INFO  [codedeploy-agent(626040)]: [Aws::CodeDeployCommand::Client 200 45.335323 0 retries] poll_host_command(host_identifier:"arn:aws:iam::697698772502:user/norio_202407") 
@@ -49,3 +64,5 @@ The deployment failed because no instances were found for your deployment group.
 ```
 
 https://syuntech.net/aws/aws-codedeploy_error/#google_vignette
+codepipelineとawslightsailとprofileのregionをできれば統一すべき！
+そうしないとインスタンスが見つからない・・・となってしまう！
