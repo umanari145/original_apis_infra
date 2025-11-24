@@ -1,20 +1,44 @@
 # original_apis_infra
 
 
-# オンプレミスデプロイグループの登録
+## オンプレミスデプロイグループの登録
 オンプレとしての登録(タグも登録)
 ![オンプレ確認](images/dg/タグ登録.png)
 確認
 ![確認](images/dg/確認.png)
 
-
-# sourceの登録
+## sourceの登録
 保留中になっている
 ![step1](images/connections/step1.png)
 リポジトリを選択
 ![step2](images/connections/step2.png)
 成功していることを確認
 ![step3](images/connections/step3.png)
+
+### AWS CodeDeploy
+
+https://qiita.com/urushibata/items/d36b5619eb3d51dc4b84<br>
+https://zenn.dev/satory074/articles/satory074_2021092201<br>
+
+
+lightsailへのCodeDeployAgentのinstall
+```
+sudo apt-get update
+sudo apt-get install -y ruby wget
+wget https://aws-codedeploy-ap-northeast-1.s3.amazonaws.com/latest/install
+sudo chmod +x ./install
+sudo ./install auto
+```
+
+EC2ならこのままインスタンスをCodeDeployにアタッチするだけで良いが、lightsailはオンプレ扱いなので、下記の登録が必要<br>
+/etc/codedeploy-agent/conf/codedeploy.onpremises.yml に以下を追加<br>
+(ファイル名に注意! codedeploy.ymlに追加しても動かない)
+```
+aws_access_key_id: *****
+aws_secret_access_key: *****
+iam_user_arn: ******
+region: ap-northeast-1
+```
 
 ## デプロイエージェントの登録
 オンプレミスの登録<br>
