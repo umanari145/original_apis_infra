@@ -3,9 +3,9 @@
 ## sourceの登録
 保留中になっている
 ![step1](images/connections/step1.png)
-リポジトリを選択
+リポジトリを選択<br>
 ![step2](images/connections/step2.png)
-成功していることを確認
+<br>成功していることを確認
 ![step3](images/connections/step3.png)
 
 ## AWS CodeDeploy
