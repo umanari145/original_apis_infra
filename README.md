@@ -1,12 +1,5 @@
 # original_apis_infra
 
-
-## オンプレミスデプロイグループの登録
-オンプレとしての登録(タグも登録)
-![オンプレ確認](images/dg/タグ登録.png)
-確認
-![確認](images/dg/確認.png)
-
 ## sourceの登録
 保留中になっている
 ![step1](images/connections/step1.png)
@@ -15,10 +8,12 @@
 成功していることを確認
 ![step3](images/connections/step3.png)
 
-### AWS CodeDeploy
+## AWS CodeDeploy
 
 https://qiita.com/urushibata/items/d36b5619eb3d51dc4b84<br>
 https://zenn.dev/satory074/articles/satory074_2021092201<br>
+
+
 
 
 lightsailへのCodeDeployAgentのinstall
@@ -39,23 +34,31 @@ aws_secret_access_key: *****
 iam_user_arn: ******
 region: ap-northeast-1
 ```
-
+#### オンプレミスデプロイグループの登録
+オンプレとしての登録(タグも登録)
+![オンプレ確認](images/dg/タグ登録.png)
+確認
+![確認](images/dg/確認.png)
 ## デプロイエージェントの登録
 オンプレミスの登録<br>
-regionはlightsailのregion
+regionはlightsailのregion<br>
+instance-nameはarnではなくlightsailの名称
 ```
 aws deploy register-on-premises-instance --instance-name LAMP_PHP_8-1  --iam-user-arn arn:aws:iam::697698772502:user/for_awslightsail --region ap-northeast-1  --profile for_awslightsail
 
 aws deploy add-tags-to-on-premises-instances --instance-names LAMP_PHP_8-1  --tags Key=Name,Value=CodeDeployMyLightsail --region ap-northeast-1 --profile for_awslightsail
 
 aws deploy list-on-premises-instances --region ap-northeast-1 --profile for_awslightsail
-
 ```
 
-登録解除
+登録解除(画面から外せないので要注意)
+```
 aws deploy deregister-on-premises-instance --instance-name LAMP_PHP_8-1 --profile norio
+```
 
-ログ
+登録を確認する方法は？<br>
+lightsailのログをみて受付OKになっているか確認をする
+
 tail -1000 /var/log/aws/codedeploy-agent/codedeploy-agent.log
 
 以下の状態になっていればagent側が受付OKにはなっている
@@ -88,5 +91,5 @@ The deployment failed because no instances were found for your deployment group.
 ```
 
 https://syuntech.net/aws/aws-codedeploy_error/#google_vignette
-codepipelineとawslightsailとprofileのregionをできれば統一すべき！
+codepipelineとawslightsailとprofileのregionをできれば統一すべき！<br>
 そうしないとインスタンスが見つからない・・・となってしまう！
